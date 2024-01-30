@@ -3,9 +3,15 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
+        System.out.println("'gourmet|alent'");
+        choice();
+
+    }
+
+    private static void choice(){
         Scanner userInput = new Scanner(System.in);
         int catgChoise = 0;
-        System.out.println("'gourmet|alent'");
+
         System.out.println(" ");
         System.out.println("O que você vai querer cozinhar hoje?");
         System.out.println("Por favor, selecione por número.");
@@ -13,16 +19,24 @@ public class Main {
         System.out.println("2. Carne");
         System.out.println("3. Peixe;");
         System.out.println("4. Sobremesas;");
+
         try {
             catgChoise = userInput.nextInt();
+            if (catgChoise >= 1 && catgChoise <= 4){
+            new menuCatg(catgChoise);
+        } else {
+            System.out.println("Valor inválido! Por favor use os números das opções.");
+            choice();
+        }
         } catch (Exception e){
-            System.out.println("Valor inválido! Por favor use um número.");
-            TimeUnit.SECONDS.sleep(3);
+           System.out.println("Valor inválido! Por favor use um número.");
+           // TimeUnit.SECONDS.sleep(3);
             System.out.print("\033[H\033[2J");
             System.out.flush();
-            main(new String[]{""});
+            choice();
         }
-        switch (catgChoise){
+
+        /*switch (catgChoise){
             case 1:
                 //menu catg de sopas
                 new menuCatg(1);
@@ -41,11 +55,10 @@ public class Main {
                 break;
             default:
                 System.out.println("Por favor  introduza um número de seleção válido");
-                TimeUnit.SECONDS.sleep(3);
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
+                //TimeUnit.SECONDS.sleep(3);
+                //System.out.print("\033[H\033[2J");
+                //System.out.flush();
                 main(new String[]{""});
-                break;
-        }
+                break;*/
     }
 }
