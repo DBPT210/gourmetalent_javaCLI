@@ -8,7 +8,7 @@ public class Main {
 
     }
 
-    private static void choice(){
+    private static void choice() throws InterruptedException {
         Scanner userInput = new Scanner(System.in);
         int catgChoise = 0;
 
@@ -30,7 +30,7 @@ public class Main {
         }
         } catch (Exception e){
            System.out.println("Valor inválido! Por favor use um número.");
-           // TimeUnit.SECONDS.sleep(3);
+           TimeUnit.SECONDS.sleep(3);
             System.out.print("\033[H\033[2J");
             System.out.flush();
             choice();
