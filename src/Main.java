@@ -15,16 +15,19 @@ public class Main {
         System.out.println(" ");
         System.out.println("O que você vai querer cozinhar hoje?");
         System.out.println("Por favor, selecione por número.");
-        System.out.println("1. Sopas e Cozidos;");
-        System.out.println("2. Carne");
-        System.out.println("3. Peixe;");
-        System.out.println("4. Sobremesas;");
+        System.out.println("1. Carne;");
+        System.out.println("2. Peixe");
+        System.out.println("3. Sobremesas;");
+        System.out.println("4. Sopas e Cozidos;");
 
         try {
             catgChoise = userInput.nextInt();
             if (catgChoise >= 1 && catgChoise <= 4){
             new menuCatg(catgChoise);
         } else {
+                if (catgChoise == 5){
+                    new debug_jdbc(); //para depurar e testar JDBC (SQL no Java)
+                }
             System.out.println("Valor inválido! Por favor use os números das opções.");
             choice();
         }

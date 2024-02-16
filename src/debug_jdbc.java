@@ -1,21 +1,10 @@
-import java.sql.*;
-public class menuCatg {
-    public menuCatg(int catg) throws SQLException{
-        switch (catg){
-            case 1:
-                System.out.println("Categoria: Carne;");
-                break;
-            case 2:
-                System.out.println("Categoria: Peixe;");
-                break;
-            case 3:
-                System.out.println("Categoria: Sobremesas;");
-                break;
-            case 4:
-                System.out.println("Categoria: Sopas e Cozidos;");
-        }
 
-        // database connector
+
+import java.sql.*;
+
+public class debug_jdbc {
+    public debug_jdbc() throws SQLException {
+        System.out.println("debug_jdbc");
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -36,8 +25,10 @@ public class menuCatg {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        // end of database connector
-
+        System.out.println("CONNECTED TO DATABASE!");
+        select(connection);
+    }
+    public void select(Connection connection) throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -49,43 +40,23 @@ public class menuCatg {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        int catg = 2;
         ResultSet resultSet = statement.executeQuery("SELECT * FROM receitas WHERE id_categoria = " + catg + " ;");
         while (resultSet.next()){
+
+            //String result = resultSet.getString("id");
+            //System.out.println(result);
 
             System.out.printf("%d %s\n",
                     resultSet.getInt(1),
                     resultSet.getString(2)
-            );
+                    );
 
+            //System.out.printf("Id: %d, Name: %s, Salary: %d, Age: %d\n", // select return
+            //        resultSet.getInt(1), resultSet.getString("name"),
+            //        resultSet.getInt(3), resultSet.getInt("age"));
         } // Tanto podemos utilizar o indice da coluna, como o nome que identifica a coluna
         connection.close();// Temos sempre que terminar a ligação
-
-//        switch (catg){
-//            case 1:
-//                catgCarne();
-//                break;
-//            case 2:
-//                catgPeixe();
-//                break;
-//            case 3:
-//                catgSobrem();
-//                break;
-//            case 4:
-//                catgSopa();
-//                break;
-//        }
-//    }
-//    public void catgCarne(){
-//        System.out.println("Categoria: Carne;");
-//
-//    }
-//    public void catgPeixe(){
-//        System.out.println("Categoria: Peixe;");
-//    }
-//    public void catgSobrem(){
-//        System.out.println("Categoria: Sobremesas;");
-//    }
-//    public void catgSopa(){
-//        System.out.println("Categoria: Sopas e Cozidos;");
+        System.exit(69);
     }
 }
