@@ -53,39 +53,39 @@ public class menuCatg {
         while (resultSet.next()){
 
             System.out.printf("%d %s\n",
-                    resultSet.getInt(1),
-                    resultSet.getString(2)
-            );
+                    resultSet.getInt(1), //id
+                    resultSet.getString(2) //nome de receita
+            ); //loop para mostrar todos os resultados
 
-        } // Tanto podemos utilizar o indice da coluna, como o nome que identifica a coluna
-        connection.close();// Temos sempre que terminar a ligação
+        }
+        connection.close();
 
-//        switch (catg){
-//            case 1:
-//                catgCarne();
-//                break;
-//            case 2:
-//                catgPeixe();
-//                break;
-//            case 3:
-//                catgSobrem();
-//                break;
-//            case 4:
-//                catgSopa();
-//                break;
-//        }
-//    }
-//    public void catgCarne(){
-//        System.out.println("Categoria: Carne;");
-//
-//    }
-//    public void catgPeixe(){
-//        System.out.println("Categoria: Peixe;");
-//    }
-//    public void catgSobrem(){
-//        System.out.println("Categoria: Sobremesas;");
-//    }
-//    public void catgSopa(){
-//        System.out.println("Categoria: Sopas e Cozidos;");
+/*        switch (catg){
+            case 1:
+                catgCarne();
+                break;
+            case 2:
+                catgPeixe();
+                break;
+            case 3:
+                catgSobrem();
+                break;
+            case 4:
+                catgSopa();
+                break;
+        }
+    }
+    public void catgCarne(){
+        System.out.println("Categoria: Carne;");
+
+    }
+    public void catgPeixe(){
+        System.out.println("Categoria: Peixe;");
+    }
+    public void catgSobrem(){
+        System.out.println("Categoria: Sobremesas;");
+    }
+    public void catgSopa(){
+        System.out.println("Categoria: Sopas e Cozidos;"); */
     }
 }
