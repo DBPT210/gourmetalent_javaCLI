@@ -14,7 +14,6 @@ public class menuCatg {
             case 4:
                 System.out.println("Categoria: Sopas e Cozidos;");
         }
-
         // database connector
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -37,7 +36,7 @@ public class menuCatg {
             throw new RuntimeException(e);
         }
         // end of database connector
-
+        // start of [SQL SELECT receitas de categoria]
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -59,6 +58,7 @@ public class menuCatg {
 
         }
         connection.close();
+        // end of [SQL SELECT receitas de categoria]
 
 /*        switch (catg){
             case 1:

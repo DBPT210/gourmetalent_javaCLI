@@ -19,14 +19,18 @@ public class Main {
         System.out.println("2. Peixe");
         System.out.println("3. Sobremesas;");
         System.out.println("4. Sopas e Cozidos;");
+        System.out.println("5. Criar receita;");
 
         try {
             catgChoise = userInput.nextInt();
+            if (catgChoise == 0){
+                new debug_jdbc();
+            }
             if (catgChoise >= 1 && catgChoise <= 4){
             new menuCatg(catgChoise);
         } else {
                 if (catgChoise == 5){
-                    new debug_jdbc(); //para depurar e testar JDBC (SQL no Java)
+                    new CriarReceita();
                 }
             System.out.println("Valor inválido! Por favor use os números das opções.");
             choice();
@@ -34,7 +38,7 @@ public class Main {
         } catch (Exception e){
            System.out.println("Valor inválido! Por favor use um número.");
            TimeUnit.SECONDS.sleep(3);
-            System.out.print("\033[H\033[2J");
+            System.out.print("\033[H\033[2J"); //mais ou menos um "clear screen"
             System.out.flush();
             choice();
         }

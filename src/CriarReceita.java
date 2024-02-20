@@ -1,0 +1,91 @@
+import javax.security.auth.login.LoginContext;
+import java.sql.*;
+import java.util.Scanner;
+public class CriarReceita {
+    public Scanner userInput = new Scanner(System.in);
+    public String strInput;
+    public CriarReceita() throws SQLException {
+
+        System.out.println("Bemvindo ao criador de receitas!");
+        System.out.println("Faça login ou crie uma conta:");
+        System.out.println("Comandos disponíveis:");
+        System.out.println("login - para fazer login com uma conta existente;");
+        System.out.println("criar - para criar uma nova conta;");
+        strInput = userInput.next(); //input
+        switch (strInput){
+            case "login":
+                Login();
+                break;
+            case "criar":
+                CreateAcc();
+                break;
+            default:
+                System.out.println("Por favor escolha uma opção dada.");
+                new CriarReceita();
+        }
+        //System.out.println("Aqui você pode criar a sua propria receita para todos os utilizadores");
+    }
+    public void Login() throws SQLException{
+        System.out.println("Por favor introduza os seus detalhes de sua conta:");
+        System.out.print("Username: ");
+        strInput = userInput.next(); //input
+        String loginUsername = strInput;
+        System.out.printf("\nPassword: ");
+        strInput = userInput.next(); //input
+        String loginPassword = strInput;
+
+        // database connector
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String dbName = "gourmetalent";
+            String user = "root";
+            String password = "";
+            String url = "jdbc:mysql://localhost:3306/" + dbName;
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // end of database connector
+
+        // start of [SQL SELECT receitas de categoria]
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
+
+
+        while (resultSet.next()){
+
+            System.out.printf("%s\n",
+                    resultSet.getString(1)
+            ); //loop para mostrar todos os resultados
+
+        }
+
+        // end of [SQL SELECT receitas de categoria]
+        connection.close();
+    }
+
+    public void CreateAcc(){
+
+    }
+
+}
