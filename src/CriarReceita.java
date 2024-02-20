@@ -70,15 +70,10 @@ public class CriarReceita {
             throw new RuntimeException(e);
         }
         ResultSet resultSet = statement.executeQuery("SELECT * FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
-
-
-        while (resultSet.next()){
-
-            System.out.printf("%s\n",
-                    resultSet.getString(1)
-            ); //loop para mostrar todos os resultados
-
+        if (!resultSet.next()){ //verificar se o user existe
+            System.out.println("USER NOT FOUND!");
         }
+
 
         // end of [SQL SELECT receitas de categoria]
         connection.close();
