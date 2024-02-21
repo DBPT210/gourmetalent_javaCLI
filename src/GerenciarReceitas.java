@@ -1,11 +1,9 @@
-// deprecated (a class foi mudada para "GerenciarReceitas.java). Só está aqui para manter as alterações de codigo
-/*import java.sql.*;
+import java.sql.*;
 import java.util.Scanner;
-public class CriarReceita {
+public class GerenciarReceitas {
     public Scanner userInput = new Scanner(System.in);
     public String strInput;
-    public CriarReceita() throws SQLException {
-
+    public GerenciarReceitas() throws SQLException {
         System.out.println("Bemvindo ao criador de receitas!");
         System.out.println("Faça login ou crie uma conta:");
         System.out.println("Comandos disponíveis:");
@@ -21,7 +19,7 @@ public class CriarReceita {
                 break;
             default:
                 System.out.println("Por favor escolha uma opção dada.");
-                new CriarReceita();
+                new GerenciarReceitas();
         }
         //System.out.println("Aqui você pode criar a sua propria receita para todos os utilizadores");
     }
@@ -151,7 +149,7 @@ public class CriarReceita {
             CreateAcc();
         }
         System.out.println("A sua conta foi criada! Agora você pode fazer login.");
-        new CriarReceita();
+        new GerenciarReceitas();
         // end of [create account]
 
     }
@@ -165,4 +163,4 @@ public class CriarReceita {
     public void EliminarReceita(){
 
     }
-}*/
+}

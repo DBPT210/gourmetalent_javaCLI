@@ -1,4 +1,3 @@
-import java.sql.Time;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 public class Main {
@@ -19,7 +18,8 @@ public class Main {
         System.out.println("2. Peixe");
         System.out.println("3. Sobremesas;");
         System.out.println("4. Sopas e Cozidos;");
-        System.out.println("5. Criar receita;");
+        System.out.println("-----------------------------");
+        System.out.println("5. Gerencionador de receitas;");
 
         try {
             catgChoise = userInput.nextInt();
@@ -30,7 +30,7 @@ public class Main {
             new menuCatg(catgChoise);
         } else {
                 if (catgChoise == 5){
-                    new CriarReceita();
+                    new GerenciarReceitas();
                 }
             System.out.println("Valor inválido! Por favor use os números das opções.");
             choice();
