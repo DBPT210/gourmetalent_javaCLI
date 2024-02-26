@@ -1,11 +1,10 @@
-import java.sql.Time;
+import java.sql.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, SQLException {
         System.out.println("'gourmet|alent'");
         choice();
-
     }
 
     private static void choice() throws InterruptedException {
@@ -23,49 +22,25 @@ public class Main {
 
         try {
             catgChoise = userInput.nextInt();
-            if (catgChoise == 0){
+            if (catgChoise == 0) {
                 new debug_jdbc();
             }
-            if (catgChoise >= 1 && catgChoise <= 4){
-            new menuCatg(catgChoise);
-        } else {
-                if (catgChoise == 5){
+            if (catgChoise >= 1 && catgChoise <= 4) {
+                new menuCatg(catgChoise);
+
+            } else {
+                if (catgChoise == 5) {
                     new CriarReceita();
                 }
-            System.out.println("Valor inválido! Por favor use os números das opções.");
-            choice();
-        }
-        } catch (Exception e){
-           System.out.println("Valor inválido! Por favor use um número.");
-           TimeUnit.SECONDS.sleep(3);
+                System.out.println("Valor inválido! Por favor use os números das opções.");
+                choice();
+            }
+        } catch (Exception e) {
+            System.out.println("Valor inválido! Por favor use um número.");
+            // TimeUnit.SECONDS.sleep(3);
             System.out.print("\033[H\033[2J"); //mais ou menos um "clear screen"
             System.out.flush();
             choice();
         }
-
-        /*switch (catgChoise){
-            case 1:
-                //menu catg de sopas
-                new menuCatg(1);
-                break;
-            case 2:
-                //menu catg de carne
-                new menuCatg(2);
-                break;
-            case 3:
-                //menu catg de peixe
-                new menuCatg(3);
-                break;
-            case 4:
-                //menu catg sobremesas
-                new menuCatg(4);
-                break;
-            default:
-                System.out.println("Por favor  introduza um número de seleção válido");
-                //TimeUnit.SECONDS.sleep(3);
-                //System.out.print("\033[H\033[2J");
-                //System.out.flush();
-                main(new String[]{""});
-                break;*/
     }
 }

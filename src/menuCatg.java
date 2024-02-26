@@ -1,7 +1,15 @@
 import java.sql.*;
+import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class menuCatg {
-    public menuCatg(int catg) throws SQLException{
-        switch (catg){
+    Scanner scanner = new Scanner(System.in);
+    public menuCatg(int catg) throws SQLException {
+        switch (catg) {
             case 1:
                 System.out.println("Categoria: Carne;");
                 break;
@@ -15,77 +23,65 @@ public class menuCatg {
                 System.out.println("Categoria: Sopas e Cozidos;");
         }
         // database connector
-        try {
+        /*try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        }
+        }*/
         Connection connection = null;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            String dbName = "gourmetalent";
+            /*try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }*/
+            String dbName = "projetin";
             String user = "root";
             String password = "";
             String url = "jdbc:mysql://localhost:3306/" + dbName;
             try {
                 connection = DriverManager.getConnection(url, user, password);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
-        } catch (ClassNotFoundException e) {
+            // end of database connector
+            // start of [SQL SELECT receitas de categoria]
+            /*try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }*/
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = null;
+            try {
+            String fistQuery = "SELECT * FROM receitas WHERE id_categoria = " + catg + " ;";
+            resultSet = statement.executeQuery(fistQuery);
+            while (resultSet.next()) {
+                        int idc = resultSet.getInt(1);
+                        String nome = resultSet.getString(2);
+                System.out.println(idc +" "+ nome);
+
+            }
+            System.out.println("\nEscolha o id da receita.");
+            int id = scanner.nextInt();
+            String secondQuery = "SELECT * FROM receitas WHERE id_receita = " + id + ";";
+            ResultSet seconresultSet = statement.executeQuery(secondQuery);
+            while (seconresultSet.next()) {
+                String ing = seconresultSet.getString(6);
+                String prep = seconresultSet.getString(5);
+                System.out.println(ing);
+                System.out.println(prep);
+            }
+            seconresultSet.close();
+
+            connection.close();
+        } catch (Exception e){
+                e.printStackTrace();
+                }
+            } catch (RuntimeException e) {
             throw new RuntimeException(e);
-        }
-        // end of database connector
-        // start of [SQL SELECT receitas de categoria]
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM receitas WHERE id_categoria = " + catg + " ;");
-        while (resultSet.next()){
-
-            System.out.printf("%d %s\n",
-                    resultSet.getInt(1), //id
-                    resultSet.getString(2) //nome de receita
-            ); //loop para mostrar todos os resultados
-
-        }
-        connection.close();
-        // end of [SQL SELECT receitas de categoria]
-
-/*        switch (catg){
-            case 1:
-                catgCarne();
-                break;
-            case 2:
-                catgPeixe();
-                break;
-            case 3:
-                catgSobrem();
-                break;
-            case 4:
-                catgSopa();
-                break;
-        }
-    }
-    public void catgCarne(){
-        System.out.println("Categoria: Carne;");
-
-    }
-    public void catgPeixe(){
-        System.out.println("Categoria: Peixe;");
-    }
-    public void catgSobrem(){
-        System.out.println("Categoria: Sobremesas;");
-    }
-    public void catgSopa(){
-        System.out.println("Categoria: Sopas e Cozidos;"); */
     }
 }
