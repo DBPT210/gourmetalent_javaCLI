@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class GerenciarReceitas {
     public Scanner userInput = new Scanner(System.in);
     public String strInput;
+    boolean exception;
     public GerenciarReceitas() throws SQLException {
         System.out.println("Bemvindo ao criador de receitas!");
         System.out.println("Faça login ou crie uma conta:");
@@ -70,24 +71,90 @@ public class GerenciarReceitas {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
         if (!resultSet.next()){ //verificar se o user existe
             System.out.println("USER NOT FOUND!");
+            new GerenciarReceitas();
         }
 
         // end of [check if user exists]
         connection.close();
+
+        GerenciarMenu(loginUsername);
+    }
+    public void GerenciarMenu(String loginUsername) throws SQLException {
+        int intInput = 0;
+        userInput = new Scanner(System.in);
 
         System.out.println("Bemvindo, " + loginUsername + "!");
         System.out.println("O que deseja fazer?");
         System.out.println("1. Criar uma receita;");
         System.out.println("2. Editar uma receita;");
         System.out.println("3. Eliminar uma receita;");
-        int intInput = userInput.nextInt(); //intInput
-        switch (intInput){
-            case 1:
-                CriadorReceita();
-                break;
-            case 2:
-                EditarReceita();
+        try{
+            intInput = userInput.nextInt(); //intInput
+            switch (intInput){
+                case 1:
+                    CriadorReceita();
+                    break;
+                case 2:
+                    EditarReceita();
+                    break;
+                case 3:
+                    EliminarReceita();
+                    break;
+                default:
+                    System.out.println("Input inválido. Por favor introduza um valor válido.");
+                    GerenciarMenu(loginUsername);
+            }
+        }catch (Exception e){
+            System.out.println("Input inválido. Por favor introduza um valor válido.");
+            GerenciarMenu(loginUsername);
         }
+    }
+    public void CriadorReceita(){
+        System.out.println("Criador de Receitas");
+        System.out.println("Nome da Receita: ");
+        String NomeReceita = userInput.next(); //input
+        System.out.println("Categoria da receita (minusculo): ");
+        String StrCatgReceita = userInput.next(); //input
+        int catgReceita;
+        switch (StrCatgReceita){ //para selecionar o ID correto das categorias
+            case "carne":
+                catgReceita = 1;
+                break;
+            case "peixe":
+                catgReceita = 2;
+                break;
+            case "sobremesa":
+            case "sobremesas":
+                catgReceita = 3;
+                break;
+            case "sopa":
+            case "sopas":
+            case "cozido":
+            case "cozidos":
+            case "sopa e cozido":
+            case "sopas e cozidos":
+            case "sopa e cozidos":
+            case "sopas e cozido":
+                catgReceita = 4;
+                break;
+            default: System.out.println("A Categoria inserida não é váliida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
+            CriadorReceita();
+        }
+        System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
+        String ingredientes = userInput.next();
+        System.out.println("Insira os passos da preparação (separe cada passo com um ';'): ");
+        String preparacao = userInput.next();
+
+
+        /*System.out.println("Insira os ingredientes (separe-os com ';'):");
+        String ingredientes = userInput.next(); //input
+        System.out.println("Introduza os passos de preparo (separe-os com ';'):");*/
+    }
+    public void EditarReceita(){
+        System.out.println("Editor de Receitas");
+    }
+    public void EliminarReceita(){
+        System.out.println("Eliminador de Receitas");
     }
 
     public void CreateAcc () throws SQLException {
@@ -151,16 +218,6 @@ public class GerenciarReceitas {
         System.out.println("A sua conta foi criada! Agora você pode fazer login.");
         new GerenciarReceitas();
         // end of [create account]
-
-    }
-
-    public void CriadorReceita(){
-
-    }
-    public void EditarReceita(){
-
-    }
-    public void EliminarReceita(){
 
     }
 }
