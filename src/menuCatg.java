@@ -23,7 +23,7 @@ public class menuCatg {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String dbName = "gourmetalent";
+            String dbName = "projetin";
             String user = "root";
             String password = "";
             String url = "jdbc:mysql://localhost:3306/" + dbName;

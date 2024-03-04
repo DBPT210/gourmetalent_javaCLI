@@ -42,7 +42,7 @@ public class GerenciarReceitas {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String dbName = "gourmetalent";
+            String dbName = "projetin";
             String user = "root";
             String password = "";
             String url = "jdbc:mysql://localhost:3306/" + dbName;
@@ -68,7 +68,8 @@ public class GerenciarReceitas {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
+        ResultSet resultSet = statement.executeQuery("SELECT `id_usuario` FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
+        System.out.printf("\nId: %d\n", resultSet.getInt("id_usuario"));
         if (!resultSet.next()){ //verificar se o user existe
             System.out.println("USER NOT FOUND!");
             new GerenciarReceitas();
@@ -92,7 +93,7 @@ public class GerenciarReceitas {
             intInput = userInput.nextInt(); //intInput
             switch (intInput){
                 case 1:
-                    CriadorReceita();
+                    CriadorReceita(loginUsername);
                     break;
                 case 2:
                     EditarReceita();
@@ -109,13 +110,13 @@ public class GerenciarReceitas {
             GerenciarMenu(loginUsername);
         }
     }
-    public void CriadorReceita(){
+    public void CriadorReceita(String loginUsername) throws SQLException {
         System.out.println("Criador de Receitas");
         System.out.println("Nome da Receita: ");
         String NomeReceita = userInput.next(); //input
         System.out.println("Categoria da receita (minusculo): ");
         String StrCatgReceita = userInput.next(); //input
-        int catgReceita;
+        int catgReceita=0;
         switch (StrCatgReceita){ //para selecionar o ID correto das categorias
             case "carne":
                 catgReceita = 1;
@@ -138,13 +139,51 @@ public class GerenciarReceitas {
                 catgReceita = 4;
                 break;
             default: System.out.println("A Categoria inserida não é váliida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
-            CriadorReceita();
+            CriadorReceita(loginUsername);
         }
         System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
         String ingredientes = userInput.next();
         System.out.println("Insira os passos da preparação (separe cada passo com um ';'): ");
         String preparacao = userInput.next();
-
+        System.out.println("Tempo de preparação (hh:mm:ss): ");
+        String tempo = userInput.next();
+        // database connector
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String dbName = "projetin";
+            String user = "root";
+            String password = "";
+            String url = "jdbc:mysql://localhost:3306/" + dbName;
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // end of database connector
+        // start of [CREATE receita]
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        int intResultSet = statement.executeUpdate("INSERT INTO `receitas` VALUES (NULL, '" + NomeReceita + "', '" + catgReceita + ", '" + loginUsername); //criar
+        System.out.println("A sua conta foi criada! Agora você pode fazer login.");
+        // end of [CREATE receita]
 
         /*System.out.println("Insira os ingredientes (separe-os com ';'):");
         String ingredientes = userInput.next(); //input
@@ -179,7 +218,7 @@ public class GerenciarReceitas {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String dbName = "gourmetalent";
+            String dbName = "projetin";
             String user = "root";
             String password = "";
             String url = "jdbc:mysql://localhost:3306/" + dbName;
@@ -216,8 +255,7 @@ public class GerenciarReceitas {
             CreateAcc();
         }
         System.out.println("A sua conta foi criada! Agora você pode fazer login.");
-        new GerenciarReceitas();
         // end of [create account]
-
+        new GerenciarReceitas();
     }
 }
