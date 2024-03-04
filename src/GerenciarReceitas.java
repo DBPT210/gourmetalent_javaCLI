@@ -25,6 +25,7 @@ public class GerenciarReceitas {
         //System.out.println("Aqui você pode criar a sua propria receita para todos os utilizadores");
     }
     public void Login() throws SQLException{
+        int id_user = 0;
         System.out.println("Por favor introduza os seus detalhes de sua conta:");
         System.out.print("Username: ");
         strInput = userInput.next(); //input
@@ -69,18 +70,18 @@ public class GerenciarReceitas {
             throw new RuntimeException(e);
         }
         ResultSet resultSet = statement.executeQuery("SELECT `id_usuario` FROM `usuario` WHERE `nome` = '" + loginUsername + "' && `password` = '" + loginPassword + "';");
-        System.out.printf("\nId: %d\n", resultSet.getInt("id_usuario"));
-        if (!resultSet.next()){ //verificar se o user existe
+        if (!resultSet.next()) { //verificar se o user existe
             System.out.println("USER NOT FOUND!");
             new GerenciarReceitas();
+        }else { //user id get
+            id_user = resultSet.getInt("id_usuario");
         }
-
         // end of [check if user exists]
         connection.close();
 
-        GerenciarMenu(loginUsername);
+        GerenciarMenu(loginUsername, id_user);
     }
-    public void GerenciarMenu(String loginUsername) throws SQLException {
+    public void GerenciarMenu(String loginUsername, int id_user) throws SQLException {
         int intInput = 0;
         userInput = new Scanner(System.in);
 
@@ -93,7 +94,7 @@ public class GerenciarReceitas {
             intInput = userInput.nextInt(); //intInput
             switch (intInput){
                 case 1:
-                    CriadorReceita(loginUsername);
+                    CriadorReceita(loginUsername, id_user);
                     break;
                 case 2:
                     EditarReceita();
@@ -103,14 +104,14 @@ public class GerenciarReceitas {
                     break;
                 default:
                     System.out.println("Input inválido. Por favor introduza um valor válido.");
-                    GerenciarMenu(loginUsername);
+                    GerenciarMenu(loginUsername, id_user);
             }
         }catch (Exception e){
             System.out.println("Input inválido. Por favor introduza um valor válido.");
-            GerenciarMenu(loginUsername);
+            GerenciarMenu(loginUsername, id_user);
         }
     }
-    public void CriadorReceita(String loginUsername) throws SQLException {
+    public void CriadorReceita(String loginUsername, int id_user) throws SQLException {
         System.out.println("Criador de Receitas");
         System.out.println("Nome da Receita: ");
         String NomeReceita = userInput.next(); //input
@@ -138,8 +139,8 @@ public class GerenciarReceitas {
             case "sopas e cozido":
                 catgReceita = 4;
                 break;
-            default: System.out.println("A Categoria inserida não é váliida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
-            CriadorReceita(loginUsername);
+            default: System.out.println("A Categoria inserida não é válida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
+            CriadorReceita(loginUsername, id_user);
         }
         System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
         String ingredientes = userInput.next();
@@ -181,10 +182,10 @@ public class GerenciarReceitas {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        int intResultSet = statement.executeUpdate("INSERT INTO `receitas` VALUES (NULL, '" + NomeReceita + "', '" + catgReceita + ", '" + loginUsername); //criar
-        System.out.println("A sua conta foi criada! Agora você pode fazer login.");
+        int intResultSet = statement.executeUpdate("INSERT INTO `receitas` (`id_receita`, `nome_receita`, `id_categoria`, `id_user`, `preparo`, `ingredientes`, `tempo`) VALUES (NULL, '" + NomeReceita + "', '" + catgReceita + "', '" + id_user + "', '" + preparacao + "', '" + ingredientes + "', '" + tempo + "');");//criar
+        System.out.println("A sua receita foi criada.");
         // end of [CREATE receita]
-
+        GerenciarMenu(loginUsername, id_user);
         /*System.out.println("Insira os ingredientes (separe-os com ';'):");
         String ingredientes = userInput.next(); //input
         System.out.println("Introduza os passos de preparo (separe-os com ';'):");*/
