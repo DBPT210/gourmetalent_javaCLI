@@ -114,9 +114,10 @@ public class GerenciarReceitas {
     public void CriadorReceita(String loginUsername, int id_user) throws SQLException {
         System.out.println("Criador de Receitas");
         System.out.println("Nome da Receita: ");
-        String NomeReceita = userInput.next(); //input
+        userInput.nextLine();
+        String NomeReceita = userInput.nextLine(); //input
         System.out.println("Categoria da receita (minusculo): ");
-        String StrCatgReceita = userInput.next(); //input
+        String StrCatgReceita = userInput.nextLine(); //input
         int catgReceita=0;
         switch (StrCatgReceita){ //para selecionar o ID correto das categorias
             case "carne":
@@ -143,11 +144,11 @@ public class GerenciarReceitas {
             CriadorReceita(loginUsername, id_user);
         }
         System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
-        String ingredientes = userInput.next();
+        String ingredientes = userInput.nextLine();
         System.out.println("Insira os passos da preparação (separe cada passo com um ';'): ");
-        String preparacao = userInput.next();
+        String preparacao = userInput.nextLine();
         System.out.println("Tempo de preparação (hh:mm:ss): ");
-        String tempo = userInput.next();
+        String tempo = userInput.nextLine();
         // database connector
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
