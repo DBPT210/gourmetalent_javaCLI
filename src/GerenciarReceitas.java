@@ -97,7 +97,7 @@ public class GerenciarReceitas {
                     CriadorReceita(loginUsername, id_user);
                     break;
                 case 2:
-                    EditarReceita();
+                    EditarReceita(loginUsername, id_user);
                     break;
                 case 3:
                     EliminarReceita();
@@ -191,8 +191,112 @@ public class GerenciarReceitas {
         String ingredientes = userInput.next(); //input
         System.out.println("Introduza os passos de preparo (separe-os com ';'):");*/
     }
-    public void EditarReceita(){
+    public void EditarReceita(String loginUsername, int id_user) throws SQLException{
         System.out.println("Editor de Receitas");
+        System.out.println("As suas receitas: ");
+        // database connector
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String dbName = "projetin";
+            String user = "root";
+            String password = "";
+            String url = "jdbc:mysql://localhost:3306/" + dbName;
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // end of database connector
+        // start of [SELECT lista de receitas do user]
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM `receitas` WHERE `id_user` = " + id_user + ";");
+        while (resultSet.next()){
+            System.out.printf("ID: %d, Nome: %s, Categoria: %d, Ingredientes: %s, Preparo: %s, Tempo: %s\n",
+                    resultSet.getInt("id_receita"),
+                    resultSet.getString("nome_receita"),
+                    resultSet.getInt("id_categoria"),
+                    resultSet.getString("ingredientes"),
+                    resultSet.getString("preparo"),
+                    resultSet.getString("tempo"));
+        }
+        // end of [SELECT lista de receitas do user]
+        System.out.println("Por favor escolha usando o ID a receita que quer modificar: ");
+        int id_receita = 0;
+        try{
+            id_receita = userInput.nextInt(); //input
+        }catch (Exception e){
+            System.out.println("Por favor introduza um número.");
+            EditarReceita(loginUsername, id_user);
+        }
+        resultSet = statement.executeQuery("SELECT * FROM `receitas` WHERE `id_receita` = '" + id_receita + "' AND `id_user` = '" + id_user + "';");
+        if (!resultSet.next()){
+            System.out.println("A receita não foi encontrada. Por favor escolha usando os ID dados.");
+            EditarReceita(loginUsername, id_user);
+        } else {
+            System.out.println("Receita selecionada.");
+            System.out.println("Faça as suas alterações:");
+            // start of [input da nova informação]
+            System.out.println("Nome da Receita: ");
+            userInput.nextLine();
+            String NomeReceita = userInput.nextLine(); //input
+            System.out.println("Categoria da receita (minusculo): ");
+            String StrCatgReceita = userInput.nextLine(); //input
+            int catgReceita=0;
+            switch (StrCatgReceita){ //para selecionar o ID correto das categorias
+                case "carne":
+                    catgReceita = 1;
+                    break;
+                case "peixe":
+                    catgReceita = 2;
+                    break;
+                case "sobremesa":
+                case "sobremesas":
+                    catgReceita = 3;
+                    break;
+                case "sopa":
+                case "sopas":
+                case "cozido":
+                case "cozidos":
+                case "sopa e cozido":
+                case "sopas e cozidos":
+                case "sopa e cozidos":
+                case "sopas e cozido":
+                    catgReceita = 4;
+                    break;
+                default: System.out.println("A Categoria inserida não é válida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
+                    CriadorReceita(loginUsername, id_user);
+            }
+            System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
+            String ingredientes = userInput.nextLine();
+            System.out.println("Insira os passos da preparação (separe cada passo com um ';'): ");
+            String preparacao = userInput.nextLine();
+            System.out.println("Tempo de preparação (hh:mm:ss): ");
+            String tempo = userInput.nextLine();
+            int intResultSet = statement.executeUpdate("UPDATE `receitas` SET `nome_receita` = '" + NomeReceita + "', `preparo` = '" + preparacao + "', `ingredientes` = '" + ingredientes + "', `tempo` = '" + tempo + "' WHERE `receitas`.`id_receita` = '" + id_receita + "';");//atualizar receita
+            System.out.println("A sua receita foi atualizada.");
+            // end of [input da nova informação]
+            GerenciarMenu(loginUsername, id_user);
+        }
+
     }
     public void EliminarReceita(){
         System.out.println("Eliminador de Receitas");
