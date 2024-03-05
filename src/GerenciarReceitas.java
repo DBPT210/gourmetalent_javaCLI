@@ -102,7 +102,7 @@ public class GerenciarReceitas {
                     EditarReceita(loginUsername, id_user);
                     break;
                 case 3:
-                    EliminarReceita();
+                    EliminarReceita(loginUsername, id_user);
                     break;
                 default:
                     System.out.println("Input inválido. Por favor introduza um valor válido.");
@@ -309,8 +309,112 @@ public class GerenciarReceitas {
         }
 
     }
-    public void EliminarReceita(){
+    public void EliminarReceita(String loginUsername, int id_user) throws SQLException{
         System.out.println("Eliminador de Receitas");
+        System.out.println("As suas receitas: ");
+        // database connector
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            String dbName = "projetin";
+            String user = "root";
+            String password = "";
+            String url = "jdbc:mysql://localhost:3306/" + dbName;
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        // end of database connector
+        // start of [SELECT lista de receitas do user]
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Map<Integer, String> categoryMap = new HashMap<>();
+        categoryMap.put(1, "Carne");
+        categoryMap.put(2, "Peixe");
+        categoryMap.put(3, "Sobremesa");
+        categoryMap.put(4, "Sopa e Cozido");
+
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM `receitas` WHERE `id_user` = " + id_user + ";");
+        while (resultSet.next()) {
+            int idCategoria = resultSet.getInt("id_categoria");
+            String categoriaNome = categoryMap.getOrDefault(idCategoria, "Unknown"); // Default to "Unknown" if not found
+            System.out.printf("ID: %d, Nome: %s, Categoria: %s, Ingredientes: %s, Preparo: %s, Tempo: %s\n",
+                    resultSet.getInt("id_receita"),
+                    resultSet.getString("nome_receita"),
+                    categoriaNome,
+                    resultSet.getString("ingredientes"),
+                    resultSet.getString("preparo"),
+                    resultSet.getString("tempo"));
+        }
+
+        // end of [SELECT lista de receitas do user]
+        System.out.println("Por favor escolha usando o ID a receita que quer eliminar: ");
+        int id_receita = 0;
+        try{
+            id_receita = userInput.nextInt(); //input
+        }catch (Exception e){
+            System.out.println("Por favor introduza um número.");
+            EliminarReceita(loginUsername, id_user);
+        }
+        resultSet = statement.executeQuery("SELECT * FROM `receitas` WHERE `id_receita` = '" + id_receita + "' AND `id_user` = '" + id_user + "';");
+        if (!resultSet.next()){
+            System.out.println("A receita não foi encontrada. Por favor escolha usando os ID dados.");
+            EliminarReceita(loginUsername, id_user);
+        } else {
+            System.out.println("Receita selecionada.");
+            System.out.println("Deseja mesmo elimina-la?");
+            String deleteChoise = userInput.next();
+            switch (deleteChoise){
+                case "sim":
+                case "SIM":
+                case "Sim":
+                case "s":
+                case "yes":
+                case "y":
+                case "S":
+                case "Y":
+                case "Yes":
+                case "YES":
+                    int intResultSet = statement.executeUpdate("DELETE FROM `receitas` WHERE `receitas`.`id_receita` = " + id_receita + ";");
+                    System.out.println("Receita eliminada com sucesso.");
+                    break;
+                case "nao":
+                case "não":
+                case "Nao":
+                case "Não":
+                case "NAO":
+                case "NÃO":
+                case "n":
+                case "N":
+                case "no":
+                case "NO":
+                    System.out.println("A receita não foi eliminada.");
+                    break;
+                default:
+                    System.out.println("Input inválido. Por favor insira sim ou não.");
+                    EliminarReceita(loginUsername, id_user);
+                    break;
+            }
+            GerenciarMenu(loginUsername, id_user);
+        }
     }
 
     public void CreateAcc () throws SQLException {
