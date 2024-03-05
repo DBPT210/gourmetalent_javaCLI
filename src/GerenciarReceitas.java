@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 public class GerenciarReceitas {
     public Scanner userInput = new Scanner(System.in);
@@ -228,16 +230,25 @@ public class GerenciarReceitas {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        Map<Integer, String> categoryMap = new HashMap<>();
+        categoryMap.put(1, "Carne");
+        categoryMap.put(2, "Peixe");
+        categoryMap.put(3, "Sobremesa");
+        categoryMap.put(4, "Sopa e Cozido");
+
         ResultSet resultSet = statement.executeQuery("SELECT * FROM `receitas` WHERE `id_user` = " + id_user + ";");
-        while (resultSet.next()){
-            System.out.printf("ID: %d, Nome: %s, Categoria: %d, Ingredientes: %s, Preparo: %s, Tempo: %s\n",
+        while (resultSet.next()) {
+            int idCategoria = resultSet.getInt("id_categoria");
+            String categoriaNome = categoryMap.getOrDefault(idCategoria, "Unknown"); // Default to "Unknown" if not found
+            System.out.printf("ID: %d, Nome: %s, Categoria: %s, Ingredientes: %s, Preparo: %s, Tempo: %s\n",
                     resultSet.getInt("id_receita"),
                     resultSet.getString("nome_receita"),
-                    resultSet.getInt("id_categoria"),
+                    categoriaNome,
                     resultSet.getString("ingredientes"),
                     resultSet.getString("preparo"),
                     resultSet.getString("tempo"));
         }
+
         // end of [SELECT lista de receitas do user]
         System.out.println("Por favor escolha usando o ID a receita que quer modificar: ");
         int id_receita = 0;
@@ -283,7 +294,7 @@ public class GerenciarReceitas {
                     catgReceita = 4;
                     break;
                 default: System.out.println("A Categoria inserida não é válida. Por favor escolha apenas entre: 'carne', 'peixe', 'sobremesas', ou 'sopas e cozidos'.");
-                    CriadorReceita(loginUsername, id_user);
+                    EditarReceita(loginUsername, id_user);
             }
             System.out.println("Insira a lista de ingredientes (separe cada ingrediente com um ';'): ");
             String ingredientes = userInput.nextLine();
@@ -291,7 +302,7 @@ public class GerenciarReceitas {
             String preparacao = userInput.nextLine();
             System.out.println("Tempo de preparação (hh:mm:ss): ");
             String tempo = userInput.nextLine();
-            int intResultSet = statement.executeUpdate("UPDATE `receitas` SET `nome_receita` = '" + NomeReceita + "', `preparo` = '" + preparacao + "', `ingredientes` = '" + ingredientes + "', `tempo` = '" + tempo + "' WHERE `receitas`.`id_receita` = '" + id_receita + "';");//atualizar receita
+            int intResultSet = statement.executeUpdate("UPDATE `receitas` SET `nome_receita` = '" + NomeReceita + "', `id_categoria` = '" + catgReceita + "', `preparo` = '" + preparacao + "', `ingredientes` = '" + ingredientes + "', `tempo` = '" + tempo + "' WHERE `receitas`.`id_receita` = '" + id_receita + "';");//atualizar receita
             System.out.println("A sua receita foi atualizada.");
             // end of [input da nova informação]
             GerenciarMenu(loginUsername, id_user);
