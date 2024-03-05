@@ -1,4 +1,3 @@
-import java.sql.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 public class Main {
@@ -18,19 +17,19 @@ public class Main {
         System.out.println("2. Peixe");
         System.out.println("3. Sobremesas;");
         System.out.println("4. Sopas e Cozidos;");
-        System.out.println("5. Criar receita;");
+        System.out.println("-----------------------------");
+        System.out.println("5. Gerencionador de receitas;");
 
         try {
             catgChoise = userInput.nextInt();
             if (catgChoise == 0) {
                 new debug_jdbc();
             }
-            if (catgChoise >= 1 && catgChoise <= 4) {
-                new menuCatg(catgChoise);
-
-            } else {
-                if (catgChoise == 5) {
-                    new CriarReceita();
+            if (catgChoise >= 1 && catgChoise <= 4){
+            new menuCatg(catgChoise);
+        } else {
+                if (catgChoise == 5){
+                    new GerenciarReceitas();
                 }
                 System.out.println("Valor inválido! Por favor use os números das opções.");
                 choice();
