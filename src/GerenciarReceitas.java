@@ -92,6 +92,8 @@ public class GerenciarReceitas {
         System.out.println("1. Criar uma receita;");
         System.out.println("2. Editar uma receita;");
         System.out.println("3. Eliminar uma receita;");
+        System.out.println("-------------------------");
+        System.out.println("4. Sair;");
         try{
             intInput = userInput.nextInt(); //intInput
             switch (intInput){
@@ -104,6 +106,8 @@ public class GerenciarReceitas {
                 case 3:
                     EliminarReceita(loginUsername, id_user);
                     break;
+                case 4:
+                    System.exit(0);
                 default:
                     System.out.println("Input inválido. Por favor introduza um valor válido.");
                     GerenciarMenu(loginUsername, id_user);
