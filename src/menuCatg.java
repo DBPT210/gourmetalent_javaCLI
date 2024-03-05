@@ -23,18 +23,8 @@ public class menuCatg {
                 System.out.println("Categoria: Sopas e Cozidos;");
         }
         // database connector
-        /*try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
         Connection connection = null;
         try {
-            /*try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }*/
             String dbName = "projetin";
             String user = "root";
             String password = "";
@@ -46,11 +36,6 @@ public class menuCatg {
             }
             // end of database connector
             // start of [SQL SELECT receitas de categoria]
-            /*try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }*/
             Statement statement = connection.createStatement();
             ResultSet resultSet = null;
             try {
@@ -62,24 +47,22 @@ public class menuCatg {
                 System.out.println(idc +" "+ nome);
 
             }
-            System.out.println("\nEscolha o id da receita.");
+            System.out.println("\nEscolha a receita.");
             int id = scanner.nextInt();
             String secondQuery = "SELECT * FROM receitas WHERE id_receita = " + id + ";";
             ResultSet seconresultSet = statement.executeQuery(secondQuery);
             while (seconresultSet.next()) {
                 String ing = seconresultSet.getString(6);
                 String prep = seconresultSet.getString(5);
-                System.out.println(ing);
-                System.out.println(prep);
+                System.out.println("\n Ingredientes: \n"+ing);
+                System.out.println("\n Modo de preparo: \n\n "+prep);
             }
-            seconresultSet.close();
+            //seconresultSet.close();
 
             connection.close();
         } catch (Exception e){
                 e.printStackTrace();
                 }
-            } catch (RuntimeException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
